@@ -45,6 +45,11 @@ export class AppMenu {
                         routerLink: ['pages/crud']
                     },
                     {
+                        label: 'Clientes',
+                        icon: 'pi pi-fw pi-pencil',
+                        routerLink: ['pages/cliente']
+                    },
+                    {
                         label: 'Not Found',
                         icon: 'pi pi-fw pi-exclamation-circle',
                         routerLink: ['dashboard/pages/notfound']
