@@ -24,7 +24,8 @@ export class ClienteService implements ICRUD<ICliente>{
     }
 
     post(cliente:ICliente ){
-        return this.http.post<ICliente>(`${this.baseUrl}${this.path}`, cliente)
+        const headers = { 'Content-Type': 'application/json' };
+        return this.http.post<ICliente>(`${this.baseUrl}${this.path}`, cliente, { headers } )
     }
 
     put(id: number, cliente:ICliente ){

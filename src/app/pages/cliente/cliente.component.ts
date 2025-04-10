@@ -22,7 +22,8 @@ import { Product, ProductService } from '../service/product.service';
 import { ClienteService } from '../service/api/clienteService';
 import { ICliente } from '../../interfaces/ICliente';
 import { Utils } from '../../shared/Utils';
-
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { Toast } from 'primeng/toast';
 
 
 interface Column {
@@ -37,7 +38,7 @@ interface ExportColumn {
 }
 
 @Component({
-  selector: 'app-cliente',
+    selector: 'app-cliente',
     standalone: true,
     imports: [
         CommonModule,
@@ -57,35 +58,31 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        NgxMaskDirective,
+        Toast
     ],
-    providers: [MessageService, ProductService, ConfirmationService, ClienteService],
-  templateUrl: './cliente.component.html',
-  styleUrl: './cliente.component.scss'
+    providers: [MessageService, ProductService, ConfirmationService, ClienteService, provideNgxMask()],
+    templateUrl: './cliente.component.html',
+    styleUrl: './cliente.component.scss'
 })
-export class ClienteComponent implements OnInit{
-
-
-    productDialog: boolean = false
+export class ClienteComponent implements OnInit {
+    clienteDialog: boolean = false;
     @ViewChild('dt') dt!: Table;
-    exportColumns!: ExportColumn[];
+
     cols!: Column[];
     listaClientes = signal<ICliente[]>([]);
     util = new Utils();
 
-    products = signal<Product[]>([]);
+
+    cliente: ICliente = {};
     product!: Product;
 
-
-
-    selectedProducts!: Product[] | null;
     submitted: boolean = false;
     statuses!: any[];
 
-
     constructor(
         private clienteService: ClienteService,
-        private productService: ProductService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
     ) {}
@@ -98,37 +95,16 @@ export class ClienteComponent implements OnInit{
         this.buscarClientes();
     }
 
-    buscarClientes(){
+    buscarClientes() {
         this.clienteService.get().subscribe({
-            next: value => {
-                this.listaClientes.set(value)
-                console.log(this.listaClientes)
-            }, error : err => {
-                console.error(err)
+            next: (value) => {
+                console.log(value)
+                this.listaClientes.set(value);
+            },
+            error: (err) => {
+                console.error(err);
             }
-        })
-    }
-
-    loadDemoData() {
-        this.productService.getProducts().then((data) => {
-            this.products.set(data);
         });
-
-        this.statuses = [
-            { label: 'INSTOCK', value: 'instock' },
-            { label: 'LOWSTOCK', value: 'lowstock' },
-            { label: 'OUTOFSTOCK', value: 'outofstock' }
-        ];
-
-        this.cols = [
-            { field: 'code', header: 'Code', customExportHeader: 'Product Code' },
-            { field: 'name', header: 'Name' },
-            { field: 'image', header: 'Image' },
-            { field: 'price', header: 'Price' },
-            { field: 'category', header: 'Category' }
-        ];
-
-        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -136,120 +112,106 @@ export class ClienteComponent implements OnInit{
     }
 
     openNew() {
-        this.product = {};
+        this.cliente = {};
         this.submitted = false;
-        this.productDialog = true;
+        this.clienteDialog = true;
     }
 
-    editProduct(product: Product) {
-        this.product = { ...product };
-        this.productDialog = true;
-    }
-
-    deleteSelectedProducts() {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete the selected products?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.products.set(this.products().filter((val) => !this.selectedProducts?.includes(val)));
-                this.selectedProducts = null;
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Products Deleted',
-                    life: 3000
-                });
-            }
-        });
+    editCliente(cliente: ICliente) {
+        this.cliente = { ...cliente };
+        this.clienteDialog = true;
     }
 
     hideDialog() {
-        this.productDialog = false;
+        this.clienteDialog = false;
         this.submitted = false;
+        this.cliente = {};
     }
 
-    deleteProduct(product: Product) {
+    deleteCliente(cliente: ICliente) {
         this.confirmationService.confirm({
-            message: 'Are you sure you want to delete ' + product.name + '?',
-            header: 'Confirm',
+            message: 'Você quer excluir ' + cliente.nome + '?',
+            header: 'Confirme',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.products.set(this.products().filter((val) => val.id !== product.id));
-                this.product = {};
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Product Deleted',
-                    life: 3000
-                });
+                this.clienteService.delete(Number(cliente.id)).subscribe({
+                    next: value => {
+                        this.buscarClientes();
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: 'Cliente excluido',
+                            life: 3000
+                        });
+                    },
+                    error: err => {
+                        console.error(err)
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: err.error.message})
+
+                    }
+                })
             }
         });
     }
 
-    findIndexById(id: string): number {
-        let index = -1;
-        for (let i = 0; i < this.products().length; i++) {
-            if (this.products()[i].id === id) {
-                index = i;
-                break;
+    updateCliente(cliente: ICliente){
+        let id:number = cliente.id!
+        this.clienteService.put(id,cliente).subscribe({
+            next: value => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: 'Usuario Atualizado',
+                    life: 3000
+                });
+                this.buscarClientes();
+                this.hideDialog();
+            },
+            error: err => {
+                console.error(err)
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: err.error.message})
             }
-        }
-
-        return index;
+        })
     }
 
-    createId(): string {
-        let id = '';
-        var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (var i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
+    cadastrarCliente(){
+        console.log(this.cliente)
+        this.clienteService.post(this.cliente).subscribe({
+            next: value => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: 'Usuario Cadastrado',
+                    life: 3000
+                });
+                this.buscarClientes();
+                this.hideDialog();
+            },
+            error: value => {
+                console.error(value)
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: value.error.message})
+            }
+        });
     }
 
-    getSeverity(status: string) {
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warn';
-            case 'OUTOFSTOCK':
-                return 'danger';
-            default:
-                return 'info';
-        }
-    }
-
-    saveProduct() {
+    saveCliente() {
         this.submitted = true;
-        let _products = this.products();
-        if (this.product.name?.trim()) {
-            if (this.product.id) {
-                _products[this.findIndexById(this.product.id)] = this.product;
-                this.products.set([..._products]);
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Product Updated',
-                    life: 3000
-                });
+        if (this.cliente.nome?.trim() && this.cliente.endereco?.trim() && this.cliente.phone?.trim()) {
+            if (this.cliente.id){
+                this.updateCliente(this.cliente)
             } else {
-                this.product.id = this.createId();
-                this.product.image = 'product-placeholder.svg';
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Product Created',
-                    life: 3000
-                });
-                this.products.set([..._products, this.product]);
+                this.cadastrarCliente()
             }
-
-            this.productDialog = false;
-            this.product = {};
         }
+
     }
-
-
 }

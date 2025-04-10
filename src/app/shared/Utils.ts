@@ -1,6 +1,7 @@
 
 
 export class Utils {
+
     formatarNumero(num: number| undefined): string {
         if (typeof num == "number") {
             try {
@@ -45,12 +46,14 @@ export class Utils {
     }
 
 
-
+    formatarStringParaDate(data: string, param: string = "/"){
+        const [dia, mes, ano] = data.split("/");
+        return  new Date(+ano, +mes - 1, +dia);
+    }
 
     formatarDataParaString(dateString: string):string {
         try {
             if (dateString != null){
-                console.log(dateString.length)
                 if (dateString.length == 3) {
                     const date = new Date(dateString)
                     const dia: string = String(date.getDate()).padStart(2, '0');
@@ -75,6 +78,21 @@ export class Utils {
         } catch (err){
             return "";
         }
+    }
+
+    formatarDataParaStringComBarras(date: string | Date | undefined){
+        console.log(date)
+        if (typeof date === "string"){
+            return date
+        }
+        if (date != undefined) {
+            const newDate = new Date(date)
+            const dia: string = String(newDate.getDate()).padStart(2, '0');
+            const mes: string = String(newDate.getMonth() + 1).padStart(2, '0');
+            const ano: number = newDate.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+        return "";
     }
 
     formatarStringData(data: string):string{
