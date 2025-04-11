@@ -38,7 +38,7 @@ interface ExportColumn {
 }
 
 @Component({
-    selector: 'app-cliente',
+  selector: 'app-compras',
     standalone: true,
     imports: [
         CommonModule,
@@ -63,10 +63,10 @@ interface ExportColumn {
         Toast
     ],
     providers: [MessageService, ProductService, ConfirmationService, ClienteService, provideNgxMask()],
-    templateUrl: './cliente.component.html',
-    styleUrl: './cliente.component.scss'
+  templateUrl: './compras.component.html',
+  styleUrl: './compras.component.scss'
 })
-export class ClienteComponent implements OnInit {
+export class ComprasComponent {
     clienteDialog: boolean = false;
     @ViewChild('dt') dt!: Table;
 
@@ -98,6 +98,7 @@ export class ClienteComponent implements OnInit {
     buscarClientes() {
         this.clienteService.get().subscribe({
             next: (value) => {
+                console.log(value)
                 this.listaClientes.set(value);
             },
             error: (err) => {

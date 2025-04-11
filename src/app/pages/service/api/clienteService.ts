@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import { URL } from '../../../shared/const';
 import { ICliente } from '../../../interfaces/ICliente';
 import { ICRUD } from '../../../interfaces/ICRUD';
+import { IClienteNomeId } from '../../../interfaces/IClienteNomeId';
 
 
 @Injectable({
@@ -34,6 +35,11 @@ export class ClienteService implements ICRUD<ICliente>{
 
     delete(id:number) {
         return this.http.delete<void>(`${this.baseUrl}${this.path}?id=${id}`)
+    }
+
+
+    getClienteNomeId(){
+        return this.http.get<IClienteNomeId[]>(`${this.baseUrl}${this.path}/all/idName`)
     }
 
 

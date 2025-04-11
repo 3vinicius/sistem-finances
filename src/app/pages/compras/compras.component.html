@@ -1,0 +1,128 @@
+<p-toast />
+
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+    </ng-template>
+</p-toolbar>
+
+
+
+<p-table
+    #dt
+    [value]="listaClientes()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['nome', 'cpf']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Clientes"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Clientes</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <th pSortableColumn="id" style="min-width: 16rem">
+                <p-sortIcon field="dataNascimento" />
+                Id
+            </th>
+            <th pSortableColumn="nome" style="min-width:16rem">
+                Nome
+                <p-sortIcon field="name" />
+            </th>
+            <th style="min-width: 8rem">
+                Endereço
+            </th>
+            <th style="min-width:10rem">
+                Phone
+            </th>
+            <th style="min-width:10rem">
+                Cpf
+            </th>
+            <th pSortableColumn="dataNascimento" style="min-width:10rem">
+                Data Nascimento
+                <p-sortIcon field="dataNascimento" />
+            </th>
+            <th pSortableColumn="dataCriacao" style="min-width:10rem">
+                Data Criação
+                <p-sortIcon field="dataCriacao" />
+            </th>
+
+            <th style="min-width: 12rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-cliente>
+        <tr>
+            <td style="min-width: 12rem">{{ cliente.id }}</td>
+            <td style="min-width: 16rem">{{ cliente.nome }}</td>
+            <td>{{ cliente.endereco }}</td>
+            <td>{{ cliente.phone }}</td>
+            <td>{{ cliente.cpf }}</td>
+            <td>{{ cliente.dataNascimento }}</td>
+            <td>{{ cliente.dataCriacao }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editCliente(cliente)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteCliente(cliente)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-dialog [(visible)]="clienteDialog" [style]="{ width: '450px' }" header="Cliente" [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="name" class="block font-bold mb-3">Nome</label>
+                <input type="text" pInputText id="name" [(ngModel)]="cliente.nome" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !cliente.nome">Nome é obrigatorio.</small>
+            </div>
+
+            <div>
+                <label for="endreco" class="block font-bold mb-3">Endereço</label>
+                <input type="text" pInputText id="endreco" [(ngModel)]="cliente.endereco" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !cliente.endereco">Endereço é obrigatorio.</small>
+            </div>
+
+            <div>
+                <label for="phone" class="block font-bold mb-3">Telefone</label>
+                <input [dropSpecialCharacters]="false"  type="tel" mask="(00) 0 0000-0000" pInputText placeholder="(00) 0 0000-0000"  id="phone" [(ngModel)]="cliente.phone" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !cliente.phone">Telefone é obrigatorio.</small>
+            </div>
+
+            <div>
+                <label for="cpf" class="block font-bold mb-3">CPF</label>
+                <input [dropSpecialCharacters]="false" type="text" mask="000.000.000-00" pInputText placeholder="000.000.000-00"  id="cpf" [(ngModel)]="cliente.cpf" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !cliente.cpf">CPF é obrigatorio.</small>
+            </div>
+
+            <div>
+                <label for="dataNascimento" class="block font-bold mb-3">Data de Nascimento</label>
+                <input [dropSpecialCharacters]="false" type="text" mask="00/00/0000" pInputText placeholder="10/10/2000" id="dataNascimento" [(ngModel)]="cliente.dataNascimento" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !cliente.dataNascimento">Data é obrigatorio.</small>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
+        <p-button label="Save" icon="pi pi-check" (click)="saveCliente()" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmdialog [style]="{ width: '450px' }" />

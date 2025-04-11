@@ -1,0 +1,5 @@
+::ng-deep .custom-disabled .p-button {
+    opacity: 1; /* Remove o efeito de opacidade */
+    pointer-events: none; /* Desabilita o clique sem alterar o estilo */
+    cursor: not-allowed; /* Mostra o cursor de desabilitado */
+}

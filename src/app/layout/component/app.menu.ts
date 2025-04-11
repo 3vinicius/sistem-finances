@@ -30,50 +30,24 @@ export class AppMenu {
                 routerLink: ['/pages'],
                 items: [
                     {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
-                    {
                         label: 'Login',
                         icon: 'pi pi-fw pi-sign-in',
                         routerLink: ['/auth/login']
                     },
                     {
-                        label: 'Crud',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['pages/crud']
+                        label: 'Pagamentos',
+                        icon: 'pi pi-fw pi-dollar',
+                        routerLink: ['pages/pagamentos']
+                    },
+                    {
+                        label: 'Compras',
+                        icon: 'pi pi-fw pi-shopping-bag',
+                        routerLink: ['pages/compras']
                     },
                     {
                         label: 'Clientes',
                         icon: 'pi pi-fw pi-user',
                         routerLink: ['pages/cliente']
-                    },
-                    {
-                        label: 'Not Found',
-                        icon: 'pi pi-fw pi-exclamation-circle',
-                        routerLink: ['dashboard/pages/notfound']
-                    },
-                    {
-                        label: 'Empty',
-                        icon: 'pi pi-fw pi-circle-off',
-                        routerLink: ['dashboard/pages/empty']
-                    }
-                ]
-            },
-            {
-                label: 'Get Started',
-                items: [
-                    {
-                        label: 'Documentation',
-                        icon: 'pi pi-fw pi-book',
-                        routerLink: ['/documentation']
-                    },
-                    {
-                        label: 'View Source',
-                        icon: 'pi pi-fw pi-github',
-                        url: 'https://github.com/primefaces/sakai-ng',
-                        target: '_blank'
                     }
                 ]
             }

@@ -1,0 +1,143 @@
+<p-toast />
+
+<p-toolbar styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="New" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+    </ng-template>
+</p-toolbar>
+
+
+
+<p-table
+    #dt
+    [value]="listaPagamentos()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['nome', 'cpf']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} Pagamentos"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0">Pagamentos</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Pesquisar..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <th style="min-width: 16rem">
+                Id
+            </th>
+            <th pSortableColumn="nome" style="min-width:16rem">
+                Cliente
+                <p-sortIcon field="nome" />
+            </th>
+            <th style="min-width: 8rem">
+                Valor
+            </th>
+            <th style="min-width:10rem">
+                Descrição
+            </th>
+            <th style="min-width:10rem">
+                Compensado
+            </th>
+            <th pSortableColumn="dataPagamento" style="min-width:10rem">
+                Data Pagamento
+                <p-sortIcon field="dataPagamento" />
+            </th>
+
+
+            <th style="min-width: 12rem"></th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-pagamento>
+        <tr>
+            <td style="min-width: 12rem">{{ pagamento.id }}</td>
+            <td style="min-width: 16rem"><p-button label="{{ pagamento.nome }}" icon="pi pi-user" (click)="hideDialogCliente(pagamento)"/></td>
+            <td>{{ pagamento.valor }}</td>
+            <td>{{ pagamento.descricao }}</td>
+            <td>
+                <p-button class="custom-disabled" [disabled]="true"  *ngIf="pagamento.compensado!; else pagamentoNotCompensado" label="SIM" severity="success" />
+                <ng-template #pagamentoNotCompensado>
+                    <p-button class="custom-disabled" [disabled]="true" label="NÃO" severity="danger"></p-button>
+                </ng-template>
+            </td>
+            <td>{{ pagamento.dataPagamento }}</td>
+            <td>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editPagamento(pagamento)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deletePagamento(pagamento)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<p-dialog [(visible)]="clienteDialog" [style]="{ width: '450px' }" header="Detalhes do Cliente" [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+            <div>
+                <label for="nameCliente" class="block font-bold mb-3">Nome</label>
+                <span id="nameCliente">{{ pagamento.nome }}</span>
+            </div>
+            <div>
+                <label for="endrecoCliente" class="block font-bold mb-3">Endereço</label>
+                <span id="endrecoCliente">{{ pagamento.endereco }}</span>
+            </div>
+            <div>
+                <label for="phoneCliente" class="block font-bold mb-3">Telefone</label>
+                <span id="phoneCliente">{{ pagamento.phone }}</span>
+            </div>
+            <div>
+                <label for="cpfCliente" class="block font-bold mb-3">CPF</label>
+                <span id="cpfCliente">{{ pagamento.cpf }}</span>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="pagamentoDialog" [style]="{ width: '450px' }" header="{{ pagamento.nome != null || pagamento.nome ? pagamento.nome : 'Cadastrar Cliente' }}" [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
+
+            <div [hidden]="!selectEnable">
+                <label for="nome" class="block font-bold mb-3">Cliente</label>
+                <p-select id="nome" [(ngModel)]="pagamento.id" optionLabel="nome" [style]="{ width: '100%' }"
+                          optionValue="id" [options]="listaClienteNomeId" [filter]="true" filterBy="nome"
+                          appendTo="body"></p-select>
+                <small class="text-red-500" *ngIf="submitted && !pagamento.id">nome é obrigatoria.</small>
+            </div>
+            <div>
+                <label for="descricao" class="block font-bold mb-3">Descrição</label>
+                <input type="text" pInputText id="descricao" [(ngModel)]="pagamento.descricao" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !pagamento.descricao">Descrção é obrigatoria.</small>
+            </div>
+
+            <div>
+                <label for="valor" class="block font-bold mb-3">Valor</label>
+                <input type="number"  pInputText id="valor" [(ngModel)]="pagamento.valor" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !pagamento.valor">Valor é obrigatorio.</small>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialogPagamento()" />
+        <p-button label="Save" icon="pi pi-check" (click)="savePagamento()" />
+    </ng-template>
+</p-dialog>
+
+<p-confirmdialog [style]="{ width: '450px' }" />

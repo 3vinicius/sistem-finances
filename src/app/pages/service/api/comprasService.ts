@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {DatePipe} from '@angular/common';
 import { URL } from '../../../shared/const';
 import { ICliente } from '../../../interfaces/ICliente';
 import { ICRUD } from '../../../interfaces/ICRUD';
@@ -15,7 +14,7 @@ export class ComprasService implements ICRUD<ICompras>{
     private baseUrl = URL.BASE_URL
     private path = URL.PATH.COMPRAS
 
-    constructor(private http: HttpClient, private datePipe: DatePipe) {
+    constructor(private http: HttpClient) {
     }
 
     get(){
@@ -47,7 +46,4 @@ export class ComprasService implements ICRUD<ICompras>{
     }
 
 
-    private formatDate(date: Date): string {
-        return this.datePipe.transform(date, 'dd/MM/yyyy') || '';
-    }
 }
