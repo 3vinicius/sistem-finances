@@ -109,7 +109,7 @@
 </p-dialog>
 
 
-<p-dialog [(visible)]="pagamentoDialog" [style]="{ width: '450px' }" header="{{ pagamento.nome != null || pagamento.nome ? pagamento.nome : 'Cadastrar Cliente' }}" [modal]="true">
+<p-dialog [(visible)]="pagamentoDialog" [style]="{ width: '450px' }" header="{{ pagamento.nome != null || pagamento.nome ? pagamento.nome : 'Cadastrar Pagamento' }}" [modal]="true">
     <ng-template #content>
         <div class="flex flex-col gap-6">
 
@@ -131,7 +131,6 @@
                             {{ selectedOption.nome }} - <small>{{ selectedOption.cpf }}</small>
                         </div>
                     </ng-template>
-
                 </p-select>
                 <small class="text-red-500" *ngIf="submitted && !pagamento.id">nome é obrigatoria.</small>
             </div>

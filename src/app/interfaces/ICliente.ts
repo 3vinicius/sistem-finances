@@ -1,5 +1,5 @@
 export interface ICliente {
-    id?: number,
+    idCliente?: number,
     nome?: string,
     endereco?: string,
     phone?: string,

@@ -75,7 +75,7 @@ export class ClienteComponent implements OnInit {
     util = new Utils();
 
 
-    cliente: ICliente = {};
+    cliente: ICliente = {} as ICliente;
     product!: Product;
 
     submitted: boolean = false;
@@ -133,7 +133,7 @@ export class ClienteComponent implements OnInit {
             header: 'Confirme',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.clienteService.delete(Number(cliente.id)).subscribe({
+                this.clienteService.delete(Number(cliente.idCliente)).subscribe({
                     next: value => {
                         this.buscarClientes();
                         this.messageService.add({
@@ -157,7 +157,7 @@ export class ClienteComponent implements OnInit {
     }
 
     updateCliente(cliente: ICliente){
-        let id:number = cliente.id!
+        let id:number = cliente.idCliente!
         this.clienteService.put(id,cliente).subscribe({
             next: value => {
                 this.messageService.add({
@@ -182,7 +182,7 @@ export class ClienteComponent implements OnInit {
     cadastrarCliente(){
         console.log(this.cliente)
         this.clienteService.post(this.cliente).subscribe({
-            next: value => {
+            next: (value) => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Sucesso',
@@ -192,12 +192,13 @@ export class ClienteComponent implements OnInit {
                 this.buscarClientes();
                 this.hideDialog();
             },
-            error: value => {
-                console.error(value)
+            error: (value) => {
+                console.error(value);
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Error',
-                    detail: value.error.message})
+                    detail: value.error.message
+                });
             }
         });
     }
@@ -205,7 +206,7 @@ export class ClienteComponent implements OnInit {
     saveCliente() {
         this.submitted = true;
         if (this.cliente.nome?.trim() && this.cliente.endereco?.trim() && this.cliente.phone?.trim()) {
-            if (this.cliente.id){
+            if (this.cliente.idCliente){
                 this.updateCliente(this.cliente)
             } else {
                 this.cadastrarCliente()

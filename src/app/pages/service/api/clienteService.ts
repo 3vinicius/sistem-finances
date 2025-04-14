@@ -4,47 +4,44 @@ import { URL } from '../../../shared/const';
 import { ICliente } from '../../../interfaces/ICliente';
 import { ICRUD } from '../../../interfaces/ICRUD';
 import { IClienteNomeId } from '../../../interfaces/IClienteNomeId';
+import { Observable } from 'rxjs';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class ClienteService implements ICRUD<ICliente>{
-    private baseUrl = URL.BASE_URL
-    private path = URL.PATH.CLIENTES
+export class ClienteService implements ICRUD<ICliente> {
+    private baseUrl = URL.BASE_URL;
+    private path = URL.PATH.CLIENTES;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient) {}
+
+    get() {
+        return this.http.get<ICliente[]>(`${this.baseUrl}${this.path}/all`);
     }
 
-    get(){
-        return this.http.get<ICliente[]>(`${this.baseUrl}${this.path}/all`)
+    getId(id: number) {
+        return this.http.get<ICliente>(`${this.baseUrl}${this.path}?id=${id}`);
     }
 
-    getId(id:number){
-        return this.http.get<ICliente>(`${this.baseUrl}${this.path}?id=${id}`)
-    }
-
-    post(cliente:ICliente ){
+    post(cliente: ICliente): Observable<ICliente> {
         const headers = { 'Content-Type': 'application/json' };
-        return this.http.post<ICliente>(`${this.baseUrl}${this.path}`, cliente, { headers } )
+        return this.http.post<ICliente>(`${this.baseUrl}${this.path}`, cliente, { headers });
     }
 
-    put(id: number, cliente:ICliente ){
-        return this.http.put<ICliente>(`${this.baseUrl}${this.path}`, cliente)
+    put(id: number, cliente: ICliente) {
+        return this.http.put<ICliente>(`${this.baseUrl}${this.path}`, cliente);
     }
 
-    delete(id:number) {
-        return this.http.delete<void>(`${this.baseUrl}${this.path}?id=${id}`)
+    delete(id: number) {
+        return this.http.delete<void>(`${this.baseUrl}${this.path}?id=${id}`);
     }
 
-
-    getClienteNomeId(){
-        return this.http.get<IClienteNomeId[]>(`${this.baseUrl}${this.path}/all/idName`)
+    getClienteNomeId() {
+        return this.http.get<IClienteNomeId[]>(`${this.baseUrl}${this.path}/all/idName`);
     }
 
-
-    getNomeCpf(nome:string, cpf:string){
-        return this.http.get<ICliente[]>(`${this.baseUrl}${this.path}?nome=${nome}&cpf=${cpf}`)
+    getNomeCpf(nome: string, cpf: string) {
+        return this.http.get<ICliente[]>(`${this.baseUrl}${this.path}?nome=${nome}&cpf=${cpf}`);
     }
-
 }

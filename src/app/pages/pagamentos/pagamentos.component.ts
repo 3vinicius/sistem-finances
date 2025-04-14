@@ -125,7 +125,7 @@ export class PagamentosComponent implements OnInit {
             header: 'Confirme',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.pagamentoService.delete(pagamento.id!).subscribe({
+                this.pagamentoService.delete(pagamento.idCliente!).subscribe({
                     next: value => {
                         this.buscarpagamentos();
                         this.messageService.add({
@@ -149,7 +149,7 @@ export class PagamentosComponent implements OnInit {
     }
 
     updatePagamento(pagamento: IPagamentoCliente){
-        let id:number = pagamento.id!
+        let id:number = pagamento.idCliente!
         this.pagamentoService.put(id,pagamento).subscribe({
             next: value => {
                 this.messageService.add({
@@ -195,7 +195,7 @@ export class PagamentosComponent implements OnInit {
 
     savePagamento() {
         this.submitted = true;
-        if (this.pagamento.id && this.pagamento.descricao?.trim() && this.pagamento.valor) {
+        if (this.pagamento.idCliente && this.pagamento.descricao?.trim() && this.pagamento.valor) {
             if (this.pagamento.idPagamento){
                 this.updatePagamento(this.pagamento)
             } else {
@@ -213,7 +213,7 @@ export class PagamentosComponent implements OnInit {
         return {
             valor: pagamento.valor,
             descricao: pagamento.descricao,
-            cliente: {id: pagamento.id!}
+            cliente: {id: pagamento.idCliente!}
         }
     }
 }

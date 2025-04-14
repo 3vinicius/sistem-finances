@@ -5,37 +5,36 @@ import { URL } from '../../../shared/const';
 import { ICRUD } from '../../../interfaces/ICRUD';
 import { IPagamento } from '../../../interfaces/IPagamento';
 import { IClienteNomeId } from '../../../interfaces/IClienteNomeId';
+import { IPagamentoCliente } from '../../../interfaces/IPagamentoCliente';
 
 
 @Injectable({
     providedIn: 'root'
 })
-export class PagamentoService implements ICRUD<IPagamento>{
-    private baseUrl = URL.BASE_URL
-    private path = URL.PATH.PAGAMENTOS
+export class PagamentoService implements ICRUD<IPagamento> {
+    private baseUrl = URL.BASE_URL;
+    private path = URL.PATH.PAGAMENTOS;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient) {}
+
+    get() {
+        return this.http.get<IPagamento[]>(`${this.baseUrl}${this.path}/all`);
     }
 
-    get(){
-        return this.http.get<IPagamento[]>(`${this.baseUrl}${this.path}/all`)
+    getId(id: number) {
+        return this.http.get<IPagamento>(`${this.baseUrl}${this.path}?id=${id}`);
     }
 
-    getId(id:number){
-        return this.http.get<IPagamento>(`${this.baseUrl}${this.path}?id=${id}`)
-    }
-
-    post(pagamento:IPagamento ){
+    post(object: { valor: number | undefined; descricao: string | undefined; cliente: { id: number } }): Observable<T> {
         const headers = { 'Content-Type': 'application/json' };
-        return this.http.post<IPagamento>(`${this.baseUrl}${this.path}`, pagamento, { headers } )
+        return this.http.post<IPagamentoCliente>(`${this.baseUrl}${this.path}`, object, { headers });
     }
 
-    put(id: number, pagamento:IPagamento ){
-        return this.http.put<IPagamento>(`${this.baseUrl}${this.path}`, pagamento)
+    put(id: number, pagamento: IPagamento) {
+        return this.http.put<IPagamento>(`${this.baseUrl}${this.path}`, pagamento);
     }
 
-    delete(id:number) {
-        return this.http.delete<void>(`${this.baseUrl}${this.path}?id=${id}`)
+    delete(id: number) {
+        return this.http.delete<void>(`${this.baseUrl}${this.path}?id=${id}`);
     }
-
 }

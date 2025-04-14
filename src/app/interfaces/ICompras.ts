@@ -1,10 +1,10 @@
 export interface ICompras {
-    id: number,
-    valor: number,
-    descricao: string,
-    dataPrevPagamento: Date,
-    produto: string,
-    dataCriacao: Date,
-    quitado: boolean,
-    total: number
+    idCompra?: number,
+    valor?: number,
+    descricao?: string,
+    dataPrevPagamento?: string,
+    produto?: string,
+    dataCriacao?: string,
+    quitado?: boolean,
+    total?: number
 }
