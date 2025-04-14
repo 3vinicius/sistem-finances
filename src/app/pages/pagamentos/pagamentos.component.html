@@ -117,7 +117,22 @@
                 <label for="nome" class="block font-bold mb-3">Cliente</label>
                 <p-select id="nome" [(ngModel)]="pagamento.id" optionLabel="nome" [style]="{ width: '100%' }"
                           optionValue="id" [options]="listaClienteNomeId" [filter]="true" filterBy="nome"
-                          appendTo="body"></p-select>
+                          appendTo="body">
+                    <ng-template #item let-selectedOption>
+                        <div>
+                            <p>{{ selectedOption.nome }}</p>
+                            <small>{{ selectedOption.cpf }}</small>
+                        </div>
+                    </ng-template>
+
+
+                    <ng-template #selectedItem let-selectedOption>
+                        <div>
+                            {{ selectedOption.nome }} - <small>{{ selectedOption.cpf }}</small>
+                        </div>
+                    </ng-template>
+
+                </p-select>
                 <small class="text-red-500" *ngIf="submitted && !pagamento.id">nome é obrigatoria.</small>
             </div>
             <div>

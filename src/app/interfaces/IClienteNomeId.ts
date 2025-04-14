@@ -1,4 +1,5 @@
 export interface IClienteNomeId {
     id?: number,
-    nome?: string
+    nome?: string,
+    cpf?: string
 }
