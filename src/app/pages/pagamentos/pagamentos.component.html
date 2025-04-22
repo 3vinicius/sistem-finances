@@ -115,7 +115,7 @@
 
             <div [hidden]="!selectEnable">
                 <label for="nome" class="block font-bold mb-3">Cliente</label>
-                <p-select id="nome" [(ngModel)]="pagamento.id" optionLabel="nome" [style]="{ width: '100%' }"
+                <p-select id="nome" [(ngModel)]="pagamento.idPagamento" optionLabel="nome" [style]="{ width: '100%' }"
                           optionValue="id" [options]="listaClienteNomeId" [filter]="true" filterBy="nome"
                           appendTo="body">
                     <ng-template #item let-selectedOption>
@@ -132,7 +132,7 @@
                         </div>
                     </ng-template>
                 </p-select>
-                <small class="text-red-500" *ngIf="submitted && !pagamento.id">nome é obrigatoria.</small>
+                <small class="text-red-500" *ngIf="submitted && !pagamento.idPagamento">nome é obrigatoria.</small>
             </div>
             <div>
                 <label for="descricao" class="block font-bold mb-3">Descrição</label>

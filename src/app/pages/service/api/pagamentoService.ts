@@ -4,7 +4,6 @@ import {Observable} from 'rxjs';
 import { URL } from '../../../shared/const';
 import { ICRUD } from '../../../interfaces/ICRUD';
 import { IPagamento } from '../../../interfaces/IPagamento';
-import { IClienteNomeId } from '../../../interfaces/IClienteNomeId';
 import { IPagamentoCliente } from '../../../interfaces/IPagamentoCliente';
 
 
@@ -25,7 +24,7 @@ export class PagamentoService implements ICRUD<IPagamento> {
         return this.http.get<IPagamento>(`${this.baseUrl}${this.path}?id=${id}`);
     }
 
-    post(object: { valor: number | undefined; descricao: string | undefined; cliente: { id: number } }): Observable<T> {
+    post(object: IPagamentoCliente): Observable<IPagamentoCliente> {
         const headers = { 'Content-Type': 'application/json' };
         return this.http.post<IPagamentoCliente>(`${this.baseUrl}${this.path}`, object, { headers });
     }

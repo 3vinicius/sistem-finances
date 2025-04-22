@@ -208,12 +208,12 @@ export class PagamentosComponent implements OnInit {
     contruirPagamento(pagamento: IPagamentoCliente): {
         valor: number | undefined;
         descricao: string | undefined;
-        cliente: { id: number }
+        cliente: { idCliente: number }
     } {
         return {
             valor: pagamento.valor,
             descricao: pagamento.descricao,
-            cliente: {id: pagamento.idCliente!}
+            cliente: {idCliente: pagamento.idCliente!}
         }
     }
 }
