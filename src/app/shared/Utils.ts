@@ -81,7 +81,7 @@ export class Utils {
     }
 
     formatarDataParaStringComBarras(date: string | Date | undefined){
-        console.log(date)
+
         if (typeof date === "string"){
             return date
         }

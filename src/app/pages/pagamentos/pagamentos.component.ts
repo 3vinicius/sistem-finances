@@ -20,6 +20,7 @@ import { ClienteService } from '../service/api/clienteService';
 import { IClienteNomeId } from '../../interfaces/IClienteNomeId';
 import { SelectModule } from 'primeng/select';
 import { IPagamento } from '../../interfaces/IPagamento';
+import { ICliente } from '../../interfaces/ICliente';
 
 
 interface Column {
@@ -104,6 +105,7 @@ export class PagamentosComponent implements OnInit {
 
     editPagamento(pagamento: IPagamentoCliente) {
         this.selectEnable = false;
+
         this.pagamento = { ...pagamento };
         this.pagamentoDialog = true;
     }
@@ -196,7 +198,7 @@ export class PagamentosComponent implements OnInit {
     savePagamento() {
         this.submitted = true;
         if (this.pagamento.idCliente && this.pagamento.descricao?.trim() && this.pagamento.valor) {
-            if (this.pagamento.idPagamento){
+            if (this.pagamento.id){
                 this.updatePagamento(this.pagamento)
             } else {
                 this.cadastrarPagamento()
@@ -208,12 +210,12 @@ export class PagamentosComponent implements OnInit {
     contruirPagamento(pagamento: IPagamentoCliente): {
         valor: number | undefined;
         descricao: string | undefined;
-        cliente: { idCliente: number }
+        cliente: number | undefined;
     } {
         return {
             valor: pagamento.valor,
             descricao: pagamento.descricao,
-            cliente: {idCliente: pagamento.idCliente!}
+            cliente:  pagamento.id!
         }
     }
 }

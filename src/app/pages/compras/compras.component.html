@@ -119,50 +119,62 @@
 </p-dialog>
 
 
-<!--<p-dialog [(visible)]="compraDialog" [style]="{ width: '450px' }" header="{{ pagamento.nome != null || pagamento.nome ? pagamento.nome : 'Cadastrar Cliente' }}" [modal]="true">-->
-<!--    <ng-template #content>-->
-<!--        <div class="flex flex-col gap-6">-->
+<p-dialog [(visible)]="compraDialog" [style]="{ width: '450px'}" header="{{ compra.produto != null ? compra.produto : 'Cadastrar Compra' }}"  [modal]="true">
+    <ng-template #content>
+        <div class="flex flex-col gap-6">
 
-<!--            <div [hidden]="!selectEnable">-->
-<!--                <label for="nome" class="block font-bold mb-3">Cliente</label>-->
-<!--                <p-select id="nome" [(ngModel)]="pagamento.id" optionLabel="nome" [style]="{ width: '100%' }"-->
-<!--                          optionValue="id" [options]="listaClienteNomeId" [filter]="true" filterBy="nome"-->
-<!--                          appendTo="body">-->
-<!--                    <ng-template #item let-selectedOption>-->
-<!--                        <div>-->
-<!--                            <p>{{ selectedOption.nome }}</p>-->
-<!--                            <small>{{ selectedOption.cpf }}</small>-->
-<!--                        </div>-->
-<!--                    </ng-template>-->
+            <div [hidden]="!selectEnable">
+                <label for="nome" class="block font-bold mb-3">Cliente</label>
+                <p-select  id="nome" [(ngModel)]="compra.idCliente" optionLabel="nome" [style]="{ width: '100%' }"
+                          optionValue="id" [options]="listaClienteNomeId" [filter]="true" filterBy="nome"
+                          appendTo="body">
+                    <ng-template #item let-selectedOption>
+                        <div>
+                            <p>{{ selectedOption.nome }}</p>
+                            <small>{{ selectedOption.cpf }}</small>
+                        </div>
+                    </ng-template>
 
 
-<!--                    <ng-template #selectedItem let-selectedOption>-->
-<!--                        <div>-->
-<!--                            {{ selectedOption.nome }} - <small>{{ selectedOption.cpf }}</small>-->
-<!--                        </div>-->
-<!--                    </ng-template>-->
+                    <ng-template #selectedItem let-selectedOption>
+                        <div>
+                            {{ selectedOption.nome }} - <small>{{ selectedOption.cpf }}</small>
+                        </div>
+                    </ng-template>
 
-<!--                </p-select>-->
-<!--                <small class="text-red-500" *ngIf="submitted && !pagamento.id">nome é obrigatoria.</small>-->
-<!--            </div>-->
-<!--            <div>-->
-<!--                <label for="descricao" class="block font-bold mb-3">Descrição</label>-->
-<!--                <input type="text" pInputText id="descricao" [(ngModel)]="pagamento.descricao" required autofocus fluid />-->
-<!--                <small class="text-red-500" *ngIf="submitted && !pagamento.descricao">Descrção é obrigatoria.</small>-->
-<!--            </div>-->
+                </p-select>
+                <small class="text-red-500" *ngIf="submitted && !compra.idCliente">nome é obrigatoria.</small>
+            </div>
+            <div>
+                <label for="descricao" class="block font-bold mb-3">Descrição</label>
+                <input type="text" pInputText id="descricao"   [(ngModel)]="compra.descricao" required autofocus fluid   />
+                <small class="text-red-500" *ngIf="submitted && !compra.descricao">Descrção é obrigatoria.</small>
+            </div>
 
-<!--            <div>-->
-<!--                <label for="valor" class="block font-bold mb-3">Valor</label>-->
-<!--                <input type="number"  pInputText id="valor" [(ngModel)]="pagamento.valor" required autofocus fluid />-->
-<!--                <small class="text-red-500" *ngIf="submitted && !pagamento.valor">Valor é obrigatorio.</small>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </ng-template>-->
+            <div>
+                <label for="produto" class="block font-bold mb-3">Produto</label>
+                <input type="text" pInputText id="produto" [(ngModel)]="compra.produto" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !compra.descricao">Produto é obrigatoria.</small>
+            </div>
 
-<!--    <ng-template #footer>-->
-<!--        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialogCompra()" />-->
-<!--        <p-button label="Save" icon="pi pi-check" (click)="savePagamento()" />-->
-<!--    </ng-template>-->
-<!--</p-dialog>-->
+            <div>
+                <label for="prevPagamento" class="block font-bold mb-3">Previsão Pagamento</label>
+                <p-datePicker [inline]="true" [minDate]="minDate" [maxDate]="maxDate" dateFormat="dd/mm/yyyy" id="prevPagamento" [(ngModel)]="compra.dataPrevPagamento" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !compra.dataPrevPagamento">Previsão de pagamento é obrigatoria.</small>
+            </div>
+
+            <div>
+                <label for="valor" class="block font-bold mb-3">Valor</label>
+                <input type="number"  pInputText id="valor" [(ngModel)]="compra.valor" required autofocus fluid />
+                <small class="text-red-500" *ngIf="submitted && !compra.valor">Valor é obrigatorio.</small>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template #footer>
+        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialogCompra()" />
+        <p-button label="Save" icon="pi pi-check" (click)="saveCompra()" />
+    </ng-template>
+</p-dialog>
 
 <p-confirmdialog [style]="{ width: '450px' }" />

@@ -5,6 +5,7 @@ import { URL } from '../../../shared/const';
 import { ICRUD } from '../../../interfaces/ICRUD';
 import { IPagamento } from '../../../interfaces/IPagamento';
 import { IPagamentoCliente } from '../../../interfaces/IPagamentoCliente';
+import { IpagamentoUpdate } from '../../../interfaces/IpagamentoUpdate';
 
 
 @Injectable({
@@ -24,7 +25,7 @@ export class PagamentoService implements ICRUD<IPagamento> {
         return this.http.get<IPagamento>(`${this.baseUrl}${this.path}?id=${id}`);
     }
 
-    post(object: IPagamentoCliente): Observable<IPagamentoCliente> {
+    post(object: IpagamentoUpdate): Observable<IPagamentoCliente> {
         const headers = { 'Content-Type': 'application/json' };
         return this.http.post<IPagamentoCliente>(`${this.baseUrl}${this.path}`, object, { headers });
     }

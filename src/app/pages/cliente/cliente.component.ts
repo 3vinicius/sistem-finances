@@ -180,7 +180,6 @@ export class ClienteComponent implements OnInit {
     }
 
     cadastrarCliente(){
-        console.log(this.cliente)
         this.clienteService.post(this.cliente).subscribe({
             next: (value) => {
                 this.messageService.add({
@@ -206,6 +205,7 @@ export class ClienteComponent implements OnInit {
     saveCliente() {
         this.submitted = true;
         if (this.cliente.nome?.trim() && this.cliente.endereco?.trim() && this.cliente.phone?.trim()) {
+            console.log(this.cliente)
             if (this.cliente.idCliente){
                 this.updateCliente(this.cliente)
             } else {
