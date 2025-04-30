@@ -4,6 +4,7 @@ export const URL = {
         COMPRAS : '/compras',
         PAGAMENTOS: '/pagamentos',
         CLIENTES: '/clientes',
-        AUTH: '/auth/login'
+        AUTH: '/auth/login',
+        GRAPHS: '/graphs',
     }
 };
