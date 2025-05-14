@@ -38,11 +38,11 @@ export class Utils {
         return cnpj.replace(/[.\-/]/g, '');
     }
 
-    formatarData(date: Date): string {
+    formatarData(date: Date, separetor: String): string {
         const year: number = date.getFullYear();
         const month: string = String(date.getMonth() + 1).padStart(2, '0');  // Mês é zero-indexed, então adicionamos 1
         const day: string = String(date.getDate()).padStart(2, '0');
-        return `${day}/${month}/${year}`;
+        return `${year}${separetor}${month}${separetor}${day}`;
     }
 
 

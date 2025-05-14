@@ -1,8 +1,8 @@
 export interface IDataValue {
-    data?: string,
-    valor?: number
+    dates?: string[],
+    valor?: number[]
 }
 
 export interface IGraphs {
-    [key: string]: IDataValue[]
+    [key: string]: IDataValue
 }
