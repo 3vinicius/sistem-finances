@@ -48,6 +48,11 @@ export class AppMenu {
                         label: 'Clientes',
                         icon: 'pi pi-fw pi-user',
                         routerLink: ['pages/cliente']
+                    },
+                    {
+                        label: 'Graficos',
+                        icon: 'pi pi-fw pi-chart-bar',
+                        routerLink: ['pages/graficos']
                     }
                 ]
             }
