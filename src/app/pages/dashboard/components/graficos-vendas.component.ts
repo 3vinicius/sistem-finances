@@ -1,33 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ChartModule } from 'primeng/chart';
 import { debounceTime, Subscription } from 'rxjs';
 import { LayoutService } from '../../../layout/service/layout.service';
 
+
+
 @Component({
     standalone: true,
-    selector: 'app-revenue-stream-widget',
+    selector: 'app-grafico-vendas',
     imports: [ChartModule],
     template: `<div class="card !mb-8">
-        <div class="font-semibold text-xl mb-4">Revenue Stream</div>
+        <div class="font-semibold text-xl mb-4">Grafico de Vendas da semana</div>
         <p-chart type="bar" [data]="chartData" [options]="chartOptions" class="h-80" />
     </div>`
 })
-export class RevenueStreamWidget {
+export class GraficosVendas {
+    private _dadosWid!: any;
+
+
+    @Input()
+    set dadosWid(value: any) {
+        this._dadosWid = value;
+        this.initChart();
+    }
+
+    arrayDates: string[] = []
+    arrayValues : number[] = []
+
     chartData: any;
 
     chartOptions: any;
 
     subscription!: Subscription;
 
-    constructor(public layoutService: LayoutService) {
-        this.subscription = this.layoutService.configUpdate$.pipe(debounceTime(25)).subscribe(() => {
-            this.initChart();
-        });
+    constructor() {
     }
 
     ngOnInit() {
-        this.initChart();
+
     }
+
+
+
 
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
@@ -35,37 +49,21 @@ export class RevenueStreamWidget {
         const borderColor = documentStyle.getPropertyValue('--surface-border');
         const textMutedColor = documentStyle.getPropertyValue('--text-color-secondary');
 
+        if (this._dadosWid) {
+            this.arrayDates = this._dadosWid.dates || [];
+            this.arrayValues = this._dadosWid.valor || [];
+        }
+
         this.chartData = {
-            labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+            labels: this.arrayDates,
             datasets: [
                 {
                     type: 'bar',
                     label: 'Subscriptions',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-400'),
-                    data: [4000, 10000, 15000, 4000],
-                    barThickness: 32
+                    backgroundColor: documentStyle.getPropertyValue('--p-emerald-400'),
+                    data: this.arrayValues,
+                    barThickness: this.arrayDates.length - (this.arrayDates.length * 0.2),
                 },
-                {
-                    type: 'bar',
-                    label: 'Advertising',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-300'),
-                    data: [2100, 8400, 2400, 7500],
-                    barThickness: 32
-                },
-                {
-                    type: 'bar',
-                    label: 'Affiliate',
-                    backgroundColor: documentStyle.getPropertyValue('--p-primary-200'),
-                    data: [4100, 5200, 3400, 7400],
-                    borderRadius: {
-                        topLeft: 8,
-                        topRight: 8,
-                        bottomLeft: 0,
-                        bottomRight: 0
-                    },
-                    borderSkipped: false,
-                    barThickness: 32
-                }
             ]
         };
 
@@ -105,9 +103,5 @@ export class RevenueStreamWidget {
         };
     }
 
-    ngOnDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
+
 }

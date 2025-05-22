@@ -22,7 +22,7 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/pages/dashboard'] }]
             },
             {
                 label: 'Pages',
@@ -30,32 +30,32 @@ export class AppMenu {
                 routerLink: ['/pages'],
                 items: [
                     {
-                        label: 'Login',
-                        icon: 'pi pi-fw pi-sign-in',
-                        routerLink: ['/auth/login']
-                    },
-                    {
                         label: 'Pagamentos',
                         icon: 'pi pi-fw pi-dollar',
-                        routerLink: ['pages/pagamentos']
+                        routerLink: ['pagamentos']
                     },
                     {
                         label: 'Compras',
                         icon: 'pi pi-fw pi-shopping-bag',
-                        routerLink: ['pages/compras']
+                        routerLink: ['compras']
                     },
                     {
                         label: 'Clientes',
                         icon: 'pi pi-fw pi-user',
-                        routerLink: ['pages/cliente']
+                        routerLink: ['cliente']
                     },
                     {
                         label: 'Graficos',
                         icon: 'pi pi-fw pi-chart-bar',
-                        routerLink: ['pages/graficos']
+                        routerLink: ['graficos']
                     }
                 ]
-            }
+            },
+            {
+                label: 'Auth',
+                routerLink: ['/auth/login'],
+                items: [{ label: 'Login', icon: 'pi pi-fw pi-sign-in', routerLink: [''] }]
+            },
         ];
     }
 }

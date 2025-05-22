@@ -19,7 +19,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--secundary-color) 10%, rgba(33, 150, 243, 0) 30%)">
                     <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                         <div class="text-center mb-8">
-                            
+
                             <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bem vindo !</div>
                             <span class="text-muted-color font-medium">Login </span>
                         </div>
@@ -38,7 +38,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/dashboard"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" routerLink="/pages/dashboard"></p-button>
                         </div>
                     </div>
                 </div>

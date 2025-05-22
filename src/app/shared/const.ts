@@ -6,5 +6,6 @@ export const URL = {
         CLIENTES: '/clientes',
         AUTH: '/auth/login',
         GRAPHS: '/graphs',
+        DASHBOARD: '/dashboard',
     }
 };
