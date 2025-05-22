@@ -21,13 +21,8 @@ import { IClienteNomeId } from '../../interfaces/IClienteNomeId';
 import { SelectModule } from 'primeng/select';
 import { IPagamento } from '../../interfaces/IPagamento';
 import { ICliente } from '../../interfaces/ICliente';
+import { IColumn } from '../../interfaces/IColumn';
 
-
-interface Column {
-    field: string;
-    header: string;
-    customExportHeader?: string;
-}
 
 @Component({
     selector: 'app-pagamentos',
@@ -41,13 +36,19 @@ export class PagamentosComponent implements OnInit {
     clienteDialog: boolean = false;
     @ViewChild('dt') dt!: Table;
 
-    cols!: Column[];
+    cols: IColumn[] = [
+        { field: 'id', header: 'Id' },
+        { field: 'nome', header: 'Cliente' },
+        { field: 'valor', header: 'Valor' },
+        { field: 'descricao', header: 'Descrição' },
+        { field: 'compensado', header: 'Compensado' },
+        { field: 'dataPagamento', header: 'Data Pagamento' }
+    ];
     listaPagamentos = signal<IPagamentoCliente[]>([]);
     util = new Utils();
 
 
     pagamento: IPagamentoCliente = {};
-    product!: Product;
     listaClienteNomeId: IClienteNomeId[] = []
 
     submitted: boolean = false;
@@ -62,7 +63,8 @@ export class PagamentosComponent implements OnInit {
     ) {}
 
     exportCSV() {
-        this.dt.exportCSV();
+        this.dt.exportFilename = "Relatorio de Pagamentos"
+        this.dt.exportCSV({selectionOnly : false});
     }
 
     ngOnInit() {

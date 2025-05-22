@@ -24,18 +24,11 @@ import { ICliente } from '../../interfaces/ICliente';
 import { Utils } from '../../shared/Utils';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { Toast } from 'primeng/toast';
+import { IColumn } from '../../interfaces/IColumn';
 
 
-interface Column {
-    field: string;
-    header: string;
-    customExportHeader?: string;
-}
 
-interface ExportColumn {
-    title: string;
-    dataKey: string;
-}
+
 
 @Component({
     selector: 'app-cliente',
@@ -70,13 +63,21 @@ export class ClienteComponent implements OnInit {
     clienteDialog: boolean = false;
     @ViewChild('dt') dt!: Table;
 
-    cols!: Column[];
+    cols: IColumn[] = [
+        { field: 'id', header: 'ID' },
+        { field: 'nome', header: 'Nome' },
+        { field: 'endereco', header: 'Endereço' },
+        { field: 'phone', header: 'Telefone' },
+        { field: 'cpf', header: 'CPF' },
+        { field: 'dataNascimento', header: 'Data Nascimento' },
+        { field: 'dataCriacao', header: 'Data Criação' }
+    ];
     listaClientes = signal<ICliente[]>([]);
     util = new Utils();
 
 
     cliente: ICliente = {} as ICliente;
-    product!: Product;
+
 
     submitted: boolean = false;
     statuses!: any[];
@@ -88,7 +89,8 @@ export class ClienteComponent implements OnInit {
     ) {}
 
     exportCSV() {
-        this.dt.exportCSV();
+        this.dt.exportFilename = "Relatorio de Clientes"
+        this.dt.exportCSV({ selectionOnly: false });
     }
 
     ngOnInit() {

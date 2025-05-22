@@ -29,19 +29,10 @@ import { ICompraCliente } from '../../interfaces/ICompraCliente';
 import { DatePickerModule } from 'primeng/datepicker';
 import { DatePicker } from 'primeng/datepicker';
 import { ICompras } from '../../interfaces/ICompras';
+import { IColumn } from '../../interfaces/IColumn';
 
 
 
-interface Column {
-    field: string;
-    header: string;
-    customExportHeader?: string;
-}
-
-interface ExportColumn {
-    title: string;
-    dataKey: string;
-}
 
 @Component({
   selector: 'app-compras',
@@ -78,7 +69,16 @@ export class ComprasComponent implements OnInit, AfterViewInit{
     @ViewChild('dt') dt!: Table;
     @ViewChild('prevPagamento') datePicker!: DatePicker;
 
-    cols!: Column[];
+    cols: IColumn[] = [
+        { field: 'idCompra', header: 'ID' },
+        { field: 'nome', header: 'Cliente' },
+        { field: 'valor', header: 'Valor' },
+        { field: 'dataPrevPagamento', header: 'Previsão Pagamento' },
+        { field: 'descricao', header: 'Descrição' },
+        { field: 'produto', header: 'Produto' },
+        { field: 'quitado', header: 'Quitado' },
+        { field: 'total', header: 'Total' }
+    ];
     listaCompras = signal<ICompraCliente[]>([]);
     util = new Utils();
 
@@ -86,7 +86,6 @@ export class ComprasComponent implements OnInit, AfterViewInit{
     maxDate =  new Date(this.minDate.getFullYear(), this.minDate.getMonth() + 2, this.minDate.getDate());
 
     compra: ICompraCliente = {};
-    product!: Product;
     listaClienteNomeId: IClienteNomeId[] = []
 
     submitted: boolean = false;
@@ -101,7 +100,10 @@ export class ComprasComponent implements OnInit, AfterViewInit{
     ) {}
 
     exportCSV() {
-        this.dt.exportCSV();
+        this.dt.exportFilename = "Relatorio de Compras"
+        this.dt.exportCSV({
+            selectionOnly: false,
+        });
     }
 
     ngOnInit() {
