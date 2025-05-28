@@ -18,7 +18,6 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { Product, ProductService } from '../service/product.service';
 import { ClienteService } from '../service/api/clienteService';
 import { Utils } from '../../shared/Utils';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -59,7 +58,7 @@ import { IColumn } from '../../interfaces/IColumn';
         DatePickerModule,
         Toast
     ],
-    providers: [MessageService, ProductService, ConfirmationService, ClienteService, provideNgxMask()],
+    providers: [MessageService, ConfirmationService, ClienteService, provideNgxMask()],
   templateUrl: './compras.component.html',
   styleUrl: './compras.component.scss'
 })
@@ -136,6 +135,7 @@ export class ComprasComponent implements OnInit, AfterViewInit{
             },
             error: (err) => {
                 console.error(err);
+                Utils.redirecionarUsuarioNaoAutenticadoParaLogin(err, this.messageService);
             }
         });
     }

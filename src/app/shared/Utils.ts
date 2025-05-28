@@ -1,4 +1,6 @@
-
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AuthService } from '../pages/service/api/authService';
+import { AuthorizationService } from '../pages/service/api/authorizationService';
 
 export class Utils {
 
@@ -151,5 +153,63 @@ export class Utils {
         return new Blob(byteArrays, { type: contentType });
     }
 
+    static redirecionarUsuarioNaoAutenticadoParaLogin(err: { status: number; error: { message: any; }; } | undefined, messageService:  MessageService) {
+        if (err!.status === 401) {
+            Utils.mostrarMensagemDeErro("Usuario não autenticado. Voçê será redirecionado para a pagina de login", messageService);
+            AuthorizationService.removerToken();
+            setTimeout(() => {
+                window.location.href = '/auth/login';
+            }, 2000);
+        }
+    }
+
+    static redirecionarUsuarioAutenticadoParaDashboard(messageService:  MessageService) {
+        Utils.mostrarMensagemDeSucesso("Usuário autenticado", messageService)
+        setTimeout(() => {
+            window.location.href = '/pages/dashboard';
+        }, 2000);
+
+    }
+
+    static confirmarExclusao(confirmationService: ConfirmationService, messageService: MessageService, callback: () => void) {
+        confirmationService.confirm({
+            message: 'Tem certeza que deseja excluir?',
+            header: 'Confirmação',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                callback();
+            },
+            reject: () => {
+                messageService.add({
+                    severity: 'info',
+                    summary: 'Cancelado',
+                    detail: 'Ação cancelada pelo usuário'
+                });
+            }
+        });
+    }
+
+    static mostrarMensagemDeAtencao(message: string, messageService: MessageService) {
+            messageService.add({
+                severity: 'warn',
+                summary: 'Atenção: ',
+                detail: message})
+    }
+
+    static mostrarMensagemDeErro(message: string, messageService: MessageService) {
+        messageService.add({
+            severity: 'error',
+            summary: 'Erro: ',
+            detail: message
+        });
+    }
+
+    static mostrarMensagemDeSucesso(message: string, messageService: MessageService) {
+        messageService.add({
+            severity: 'success',
+            summary: 'Sucesso: ',
+            detail: message
+        });
+    }
 }
 

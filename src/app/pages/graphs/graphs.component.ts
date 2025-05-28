@@ -22,9 +22,7 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ProductService } from '../service/product.service';
-
-
+import { Utils } from '../../shared/Utils';
 
 
 
@@ -55,7 +53,7 @@ import { ProductService } from '../service/product.service';
         ConfirmDialogModule,
     ],
     templateUrl: './graphs.component.html',
-    providers: [MessageService, ProductService, ChartModule, FluidModule,  ConfirmationService, GraphsService],
+    providers: [MessageService, ChartModule, FluidModule,  ConfirmationService, GraphsService],
     styleUrl: './graphs.component.scss'
 })
 export class GraphsComponent implements OnInit {
@@ -76,8 +74,7 @@ export class GraphsComponent implements OnInit {
 
     constructor(
         private graphsService: GraphsService,
-        private messageService: MessageService,
-        private confirmationService: ConfirmationService
+        private messageService: MessageService
     ) {
     }
 
@@ -93,11 +90,7 @@ export class GraphsComponent implements OnInit {
             },
             error: (error) => {
                 console.error(error);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: error.error.message
-                });
+                Utils.redirecionarUsuarioNaoAutenticadoParaLogin(error, this.messageService);
             }
         });
     }
@@ -119,7 +112,7 @@ export class GraphsComponent implements OnInit {
             labels: this.dataGraph['Total clientes'].dates,
             datasets: [
                 {
-                    label: 'Total Clientes',
+                    label: 'Novos Clientes',
                     data: this.dataGraph['Total clientes'].valor,
                     fill: false,
                     backgroundColor: this.documentStyle.getPropertyValue('--p-indigo-400'),
@@ -167,7 +160,7 @@ export class GraphsComponent implements OnInit {
             labels: this.dataGraph['Total compras'].dates,
             datasets: [
                 {
-                    label: 'Total Compras',
+                    label: 'Novas Compras',
                     data: this.dataGraph['Total compras'].valor,
                     fill: false,
                     backgroundColor: this.documentStyle.getPropertyValue('--p-emerald-400'),
@@ -175,7 +168,7 @@ export class GraphsComponent implements OnInit {
                     tension: 0.4
                 },
                 {
-                    label: 'Total Pagamentos',
+                    label: 'Novos Pagamentos',
                     data: this.dataGraph['Total pagamentos'].valor,
                     fill: false,
                     backgroundColor: this.documentStyle.getPropertyValue('--p-emerald-200'),

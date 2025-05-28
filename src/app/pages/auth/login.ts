@@ -7,11 +7,18 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../service/api/authService';
+import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
+import { ToastModule } from 'primeng/toast';
+import { AuthorizationService } from '../service/api/authorizationService';
+import { Utils } from '../../shared/Utils';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [ToastModule, ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, MessagesModule],
+    providers: [MessageService],
     template: `
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
@@ -34,16 +41,17 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                             <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                                 <div class="flex items-center">
                                     <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                                    <label for="rememberme1">Remember me</label>
+                                    <label for="rememberme1">Lembre-me</label>
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/pages/dashboard"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" (onClick)="autenticarUsuario()" ></p-button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <p-toast />
     `
 })
 export class Login {
@@ -52,4 +60,29 @@ export class Login {
     password: string = '';
 
     checked: boolean = false;
+
+    constructor(private authService: AuthService,
+                private messageService: MessageService
+               ) {}
+
+
+
+    autenticarUsuario(){
+        this.authService.login(this.login, this.password).subscribe({
+            next: (response) => {
+                if (response.token) {
+                    AuthorizationService.setToken(response.token);
+                    Utils.redirecionarUsuarioAutenticadoParaDashboard(this.messageService)
+                } else {
+                    console.error('Login failed: No token received');
+                }
+            },
+            error: (error) => {
+                if (error.status === 401) {
+                    Utils.mostrarMensagemDeAtencao("Usuário ou senha inválidos", this.messageService);
+                }
+            }
+        })
+
+    }
 }

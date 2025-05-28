@@ -3,10 +3,7 @@ import { RippleModule } from 'primeng/ripple';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
-import { Product, ProductService } from '../../service/product.service';
 import { DashboardService } from '../../service/api/dashboardService';
-import { Dashboard } from '../dashboard';
-import { IMapDashboard } from '../../../interfaces/IDashboard';
 import { ICompras } from '../../../interfaces/ICompras';
 
 @Component({
@@ -72,7 +69,5 @@ import { ICompras } from '../../../interfaces/ICompras';
     providers: [DashboardService]
 })
 export class ComprasRecentes {
-    products!: Product[];
     @Input() listaCompras!: ICompras[];
-
 }

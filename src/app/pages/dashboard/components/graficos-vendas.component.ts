@@ -59,7 +59,7 @@ export class GraficosVendas {
             datasets: [
                 {
                     type: 'bar',
-                    label: 'Subscriptions',
+                    label: 'Valor',
                     backgroundColor: documentStyle.getPropertyValue('--p-emerald-400'),
                     data: this.arrayValues,
                     barThickness: this.arrayDates.length - (this.arrayDates.length * 0.2),

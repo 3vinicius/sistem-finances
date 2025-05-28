@@ -13,21 +13,18 @@ import { Toast } from 'primeng/toast';
 import { Toolbar } from 'primeng/toolbar';
 import { IPagamentoCliente } from '../../interfaces/IPagamentoCliente';
 import { Utils } from '../../shared/Utils';
-import { Product, ProductService } from '../service/product.service';
 import { PagamentoService } from '../service/api/pagamentoService';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ClienteService } from '../service/api/clienteService';
 import { IClienteNomeId } from '../../interfaces/IClienteNomeId';
 import { SelectModule } from 'primeng/select';
-import { IPagamento } from '../../interfaces/IPagamento';
-import { ICliente } from '../../interfaces/ICliente';
 import { IColumn } from '../../interfaces/IColumn';
 
 
 @Component({
     selector: 'app-pagamentos',
     imports: [SelectModule,Button, ConfirmDialog, Dialog, FormsModule, IconField, InputIcon, InputText, NgIf, TableModule, Toast, Toolbar],
-    providers: [MessageService, ProductService, ConfirmationService, ClienteService, provideNgxMask()],
+    providers: [MessageService, ConfirmationService, ClienteService, provideNgxMask()],
     templateUrl: './pagamentos.component.html',
     styleUrl: './pagamentos.component.scss'
 })
@@ -90,6 +87,7 @@ export class PagamentosComponent implements OnInit {
             },
             error: (err) => {
                 console.error(err);
+                Utils.redirecionarUsuarioNaoAutenticadoParaLogin(err, this.messageService);
             }
         });
     }
@@ -145,7 +143,6 @@ export class PagamentosComponent implements OnInit {
                             severity: 'error',
                             summary: 'Error',
                             detail: err.error.message})
-
                     }
                 })
             }

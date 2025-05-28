@@ -18,7 +18,6 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { Product, ProductService } from '../service/product.service';
 import { ClienteService } from '../service/api/clienteService';
 import { ICliente } from '../../interfaces/ICliente';
 import { Utils } from '../../shared/Utils';
@@ -55,7 +54,7 @@ import { IColumn } from '../../interfaces/IColumn';
         NgxMaskDirective,
         Toast
     ],
-    providers: [MessageService, ProductService, ConfirmationService, ClienteService, provideNgxMask()],
+    providers: [MessageService, ConfirmationService, ClienteService, provideNgxMask()],
     templateUrl: './cliente.component.html',
     styleUrl: './cliente.component.scss'
 })
@@ -104,6 +103,7 @@ export class ClienteComponent implements OnInit {
             },
             error: (err) => {
                 console.error(err);
+                Utils.redirecionarUsuarioNaoAutenticadoParaLogin(err, this.messageService);
             }
         });
     }
