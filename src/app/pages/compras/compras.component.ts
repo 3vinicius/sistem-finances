@@ -190,7 +190,6 @@ export class ComprasComponent implements OnInit, AfterViewInit{
 
     updateCompra(compra:  ICompraCliente){
         let id:number = compra.idCompra!
-        console.log(compra)
         compra.dataPrevPagamento = this.util.formatarDataParaStringComBarras(compra.dataPrevPagamento)
         this.comprasService.put(id,this.contruirCompra(compra)).subscribe({
             next: value => {

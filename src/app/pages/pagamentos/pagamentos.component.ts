@@ -159,7 +159,6 @@ export class PagamentosComponent implements OnInit {
     }
 
     cadastrarPagamento(){
-        console.log(this.contruirPagamento(this.pagamento))
         this.pagamentoService.post(this.contruirPagamento(this.pagamento)).subscribe({
             next: value => {
                 Utils.mostrarMensagemDeSucesso('Pagamento Cadastrado', this.messageService);
@@ -175,7 +174,6 @@ export class PagamentosComponent implements OnInit {
 
     savePagamento() {
         this.submitted = true;
-        console.log(this.pagamento)
         if (this.pagamento.id && this.pagamento.descricao?.trim() && this.pagamento.valor) {
             if (this.pagamento.idCliente){
                 this.updatePagamento(this.pagamento)
