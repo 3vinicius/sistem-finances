@@ -1,7 +1,8 @@
 import { ICliente } from './ICliente';
 
 export interface IPagamento {
-    id?: number,
+    idPagamento?: number,
+    idCliente?: number,
     dataPagamento?: string,
     valor?: number,
     descricao?: string,

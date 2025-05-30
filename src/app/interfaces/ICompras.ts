@@ -1,5 +1,6 @@
 export interface ICompras {
     idCompra?: number,
+    idCliente?: number,
     valor?: number,
     descricao?: string,
     dataPrevPagamento?: string,

@@ -155,7 +155,6 @@ export class GraphsComponent implements OnInit {
     }
 
     pagamentosComprasChart() {
-
         this.pagamentosCompraslineData = {
             labels: this.dataGraph['Total compras'].dates,
             datasets: [

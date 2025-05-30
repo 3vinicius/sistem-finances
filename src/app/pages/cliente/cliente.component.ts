@@ -135,23 +135,14 @@ export class ClienteComponent implements OnInit {
             header: 'Confirme',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.clienteService.delete(Number(cliente.idCliente)).subscribe({
+                this.clienteService.delete(Number(cliente.id)).subscribe({
                     next: value => {
                         this.buscarClientes();
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Sucesso',
-                            detail: 'Cliente excluido',
-                            life: 3000
-                        });
+                        Utils.mostrarMensagemDeSucesso('Cliente excluido', this.messageService);
                     },
                     error: err => {
                         console.error(err)
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: err.error.message})
-
+                        Utils.mostrarMensagemDeErro(err.error.message, this.messageService);
                     }
                 })
             }
@@ -159,24 +150,16 @@ export class ClienteComponent implements OnInit {
     }
 
     updateCliente(cliente: ICliente){
-        let id:number = cliente.idCliente!
+        let id:number = cliente.id!
         this.clienteService.put(id,cliente).subscribe({
             next: value => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: 'Usuario Atualizado',
-                    life: 3000
-                });
+                Utils.mostrarMensagemDeSucesso('Usuario Atualizado', this.messageService);
                 this.buscarClientes();
                 this.hideDialog();
             },
             error: err => {
                 console.error(err)
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: err.error.message})
+                Utils.mostrarMensagemDeErro(err.error.message, this.messageService);
             }
         })
     }
@@ -184,22 +167,13 @@ export class ClienteComponent implements OnInit {
     cadastrarCliente(){
         this.clienteService.post(this.cliente).subscribe({
             next: (value) => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: 'Usuario Cadastrado',
-                    life: 3000
-                });
+                Utils.mostrarMensagemDeSucesso("Cliente cadastrado com sucesso", this.messageService);
                 this.buscarClientes();
                 this.hideDialog();
             },
             error: (value) => {
                 console.error(value);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: value.error.message
-                });
+               Utils.mostrarMensagemDeErro(value.error.message, this.messageService);
             }
         });
     }
@@ -207,8 +181,7 @@ export class ClienteComponent implements OnInit {
     saveCliente() {
         this.submitted = true;
         if (this.cliente.nome?.trim() && this.cliente.endereco?.trim() && this.cliente.phone?.trim()) {
-            console.log(this.cliente)
-            if (this.cliente.idCliente){
+            if (this.cliente.id){
                 this.updateCliente(this.cliente)
             } else {
                 this.cadastrarCliente()

@@ -21,14 +21,14 @@ import { Utils } from '../../shared/Utils';
                 <app-compras-recentes [listaCompras]="dashboardData.listaCompra" />
             </div>
             <div class="col-span-12 xl:col-span-6">
-                <app-grafico-vendas [dadosWid]="dashboardData.dateValorGraphDTO" />
+                <app-grafico-vendas [dadosWid]="dashboardData?.dateValorGraphDTO" />
             </div>
         </div>
         <p-toast />
     `
 })
 export class Dashboard {
-    dashboardData! : IDashboard;
+    dashboardData? : IDashboard;
 
 
     constructor(private dashboardService: DashboardService,

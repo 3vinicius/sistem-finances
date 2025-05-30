@@ -177,19 +177,11 @@ export class ComprasComponent implements OnInit, AfterViewInit{
                 this.comprasService.delete(compra.idCompra!).subscribe({
                     next: value => {
                         this.buscarCompras();
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Sucesso',
-                            detail: 'Compra excluida',
-                            life: 3000
-                        });
+                        Utils.mostrarMensagemDeSucesso('Compra excluida', this.messageService);
                     },
                     error: err => {
                         console.error(err)
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: err.error.message})
+                        Utils.mostrarMensagemDeErro(err.error.message, this.messageService);
                     }
                 })
             }
@@ -198,25 +190,17 @@ export class ComprasComponent implements OnInit, AfterViewInit{
 
     updateCompra(compra:  ICompraCliente){
         let id:number = compra.idCompra!
+        console.log(compra)
         compra.dataPrevPagamento = this.util.formatarDataParaStringComBarras(compra.dataPrevPagamento)
         this.comprasService.put(id,this.contruirCompra(compra)).subscribe({
             next: value => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: 'Compra Atualizado',
-                    life: 3000
-                });
+                Utils.mostrarMensagemDeSucesso('Compra Atualizada', this.messageService);
                 this.buscarCompras();
                 this.hideDialogCompra();
             },
             error: err => {
                 console.error(err)
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: err.error.message
-                });
+                Utils.mostrarMensagemDeErro(err.error.message, this.messageService);
             }
         })
     }
@@ -224,27 +208,20 @@ export class ComprasComponent implements OnInit, AfterViewInit{
     cadastrarCompra(){
         this.comprasService.post(this.contruirCompra(this.compra)).subscribe({
             next: value => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: 'Compra Cadastrado',
-                    life: 3000
-                });
+                Utils.mostrarMensagemDeSucesso("Compra cadastrada com sucesso", this.messageService);
                 this.buscarCompras();
                 this.hideDialogCompra();
             },
             error: value => {
                 console.error(value)
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: value.error.message})
+                Utils.mostrarMensagemDeErro(value.error.message, this.messageService);
             }
         });
     }
 
     saveCompra() {
         this.submitted = true;
+
         if (this.compra.idCliente && this.compra.descricao?.trim()
             && this.compra.produto?.trim()
             && this.compra.valor && this.compra.dataPrevPagamento) {

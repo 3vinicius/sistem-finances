@@ -15,13 +15,15 @@ import { LayoutService } from '../../../layout/service/layout.service';
     </div>`
 })
 export class GraficosVendas {
-    private _dadosWid!: any;
+    private _dadosWid?: any | undefined;
 
 
     @Input()
-    set dadosWid(value: any) {
+    set dadosWid(value: any | undefined) {
         this._dadosWid = value;
-        this.initChart();
+        if (this._dadosWid && this._dadosWid.dates && this._dadosWid.valor) {
+            this.initChart();
+        }
     }
 
     arrayDates: string[] = []

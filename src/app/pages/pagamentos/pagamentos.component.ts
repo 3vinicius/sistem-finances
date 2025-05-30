@@ -19,6 +19,7 @@ import { ClienteService } from '../service/api/clienteService';
 import { IClienteNomeId } from '../../interfaces/IClienteNomeId';
 import { SelectModule } from 'primeng/select';
 import { IColumn } from '../../interfaces/IColumn';
+import { IPagamentoUpdate } from '../../interfaces/IPagamentoUpdate';
 
 
 @Component({
@@ -57,7 +58,9 @@ export class PagamentosComponent implements OnInit {
         private clienteService: ClienteService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
-    ) {}
+    ) {
+        this.pagamento = {};
+    }
 
     exportCSV() {
         this.dt.exportFilename = "Relatorio de Pagamentos"
@@ -105,7 +108,6 @@ export class PagamentosComponent implements OnInit {
 
     editPagamento(pagamento: IPagamentoCliente) {
         this.selectEnable = false;
-
         this.pagamento = { ...pagamento };
         this.pagamentoDialog = true;
     }
@@ -127,22 +129,14 @@ export class PagamentosComponent implements OnInit {
             header: 'Confirme',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.pagamentoService.delete(pagamento.idCliente!).subscribe({
+                this.pagamentoService.delete(pagamento.id!).subscribe({
                     next: value => {
                         this.buscarpagamentos();
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Sucesso',
-                            detail: 'pagamento excluido',
-                            life: 3000
-                        });
+                        Utils.mostrarMensagemDeSucesso("Pagamento excluido", this.messageService);
                     },
                     error: err => {
                         console.error(err)
-                        this.messageService.add({
-                            severity: 'error',
-                            summary: 'Error',
-                            detail: err.error.message})
+                        Utils.mostrarMensagemDeErro(err.error.message, this.messageService);
                     }
                 })
             }
@@ -150,54 +144,40 @@ export class PagamentosComponent implements OnInit {
     }
 
     updatePagamento(pagamento: IPagamentoCliente){
-        let id:number = pagamento.idCliente!
+        let id:number = pagamento.idPagamento!
         this.pagamentoService.put(id,pagamento).subscribe({
             next: value => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: 'Pagamento Atualizado',
-                    life: 3000
-                });
+                Utils.mostrarMensagemDeSucesso('Pagamento Atualizado', this.messageService);
                 this.buscarpagamentos();
                 this.hideDialogPagamento();
             },
             error: err => {
                 console.error(err)
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: err.error.message})
+                Utils.mostrarMensagemDeErro(err.error.message, this.messageService);
             }
         })
     }
 
     cadastrarPagamento(){
+        console.log(this.contruirPagamento(this.pagamento))
         this.pagamentoService.post(this.contruirPagamento(this.pagamento)).subscribe({
             next: value => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: 'Pagamento Cadastrado',
-                    life: 3000
-                });
+                Utils.mostrarMensagemDeSucesso('Pagamento Cadastrado', this.messageService);
                 this.buscarpagamentos();
                 this.hideDialogPagamento();
             },
             error: value => {
                 console.error(value)
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: value.error.message})
+                Utils.mostrarMensagemDeErro(value.error.message, this.messageService);
             }
         });
     }
 
     savePagamento() {
         this.submitted = true;
-        if (this.pagamento.idCliente && this.pagamento.descricao?.trim() && this.pagamento.valor) {
-            if (this.pagamento.id){
+        console.log(this.pagamento)
+        if (this.pagamento.id && this.pagamento.descricao?.trim() && this.pagamento.valor) {
+            if (this.pagamento.idCliente){
                 this.updatePagamento(this.pagamento)
             } else {
                 this.cadastrarPagamento()
@@ -206,15 +186,11 @@ export class PagamentosComponent implements OnInit {
 
     }
 
-    contruirPagamento(pagamento: IPagamentoCliente): {
-        valor: number | undefined;
-        descricao: string | undefined;
-        cliente: number | undefined;
-    } {
+    contruirPagamento(pagamento: IPagamentoCliente):IPagamentoUpdate{
         return {
             valor: pagamento.valor,
             descricao: pagamento.descricao,
-            cliente:  pagamento.id!
+            cliente: {id: pagamento.id! }
         }
     }
 }
