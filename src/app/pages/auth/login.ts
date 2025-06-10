@@ -28,7 +28,9 @@ import { Utils } from '../../shared/Utils';
                         <div class="text-center mb-8">
 
                             <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bem vindo !</div>
-                            <span class="text-muted-color font-medium">Login </span>
+                            <span class="text-muted-color font-medium">Login: vini </span>
+                            <br/>
+                            <span class="text-muted-color font-medium">Senha: vini </span>
                         </div>
 
                         <div>
